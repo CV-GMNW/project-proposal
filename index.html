@@ -30,14 +30,22 @@ h1, h2, h3, h4, h5, h6, p, div {
     <p><i>William Chen</i> (wchen407), <i>Nathan Lai</i> (nlai8), <i>Marcus Loo</i> (mloo3), <i>Gabor Siffel</i> (gsiffel3)</p>
 
     <h2>Problem statement</h2>
-    <p>A user will be able to upload their video file to the website. A new video file will be created, which will be a stabilized version of the original video file.</p>
+    <p> Shaky videos have been a problem since the video camera has been created. Shaky videos make it hard to understand what is going on in the video. However, if you were able to reduce the "shake" in a video, it would greatly increase the clarity of the video. We plan to make an application that allows a user to upload their video file to the website. A new video file will then be created, which will be a stabilized version of the original video file.</p>
 
     <h2>Approach</h2>
     <p>The approach will utilize two passes in an attempt to stabilize the image frames. The first pass will use feature/corner detection to collect points and then find corresponding points in adjacent frames. Once the points are collected, the homography matrix will then be used to transform the second image frame’s coordinates so that it overlaps with the first frame. The difference between the two image frames will thus be minimized and the distortions will be eliminated. In the second pass, an average between 20 image frames will be taken to eliminate the video being out of frame and follows the original camera. The averaging allows the camera to be kept stabilized without going out of frame.</p>
+    <p>We can think of two major challenges/concerns that we will face. Because our approach is a multistep process, there are many places for bugs to occur. We plan to handle this by doing code reviews and test frequently/often. We will also be testing our code with packaged implementations of certain algorithms that we plan on using to see if our algorithms work. The second problem is that we think running our code will take a very long time. Our approach involves running multiple algorithms on each frame of a video. One of our group members tried to stitch a 3000x4000 resolution image on PS1 and it took several hours to run. We will try to remedy this by using any possible optimizations in algorithms that we will be using.. 
+    </p>
     <p>
         <a href="https://gitlab.com/juergens/stabbot" target="_blank">https://gitlab.com/juergens/stabbot</a>
+        <span>
+            A reddit bot that stabilizes gifs. They explained in their approach how averaging the transformations helped improve transformations moving out of view. This idea would be useful in our implemenation.
+        </span>
         <br>
         <a href="https://www.mathworks.com/help/vision/examples/video-stabilization-using-point-feature-matching.html" target="_blank">https://www.mathworks.com/help/vision/examples/video-stabilization-using-point-feature-matching.html</a>
+        <span>
+            Example of stabilizing a video in Matlab. Looking at how they determined similar points between frames seems useful.
+        </span>
     </p>
 
     <h2>Experiments and results</h2>
@@ -72,6 +80,13 @@ h1, h2, h3, h4, h5, h6, p, div {
             Experiments 1-3 all occurs in the first pass. This experiment is in the second pass. We will be manually coding this, and we hope to see the video not moving out of frame from this.
         </li>
     </ol>
+    <p>
+        Through the research that we have done, we have not found an implementation of a "perfect" video stabilization tool. Like in the gitlab link above, it explains that the tool has some shortcomings. As a result, we do not believe we will create a "perfect" video stabilization tool either. What we do want to see, however, is that our project is actually able to stabilize certain types of videos. We would like to see how our implementation fairs with others, and possibly reveal to us the different pros and cons of the algorithms that we plan to test. 
+    </p>
+    <p>
+        While not the best type of validation, we plan on validting our results by running the same video into another implementation of image stabilization, and comparing the two. We would consider this project a success if the output of the video becames stable enough for us to recognize all the main elements within the current frame.
+        Our priority is the first pass, then followed by the second pass. Our stretch would be having adding a database so users could upload their images to our website and receive the stabilized video.    
+    </p>
 </div>
 
 </body>
