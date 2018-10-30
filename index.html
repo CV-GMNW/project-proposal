@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html>
 
@@ -24,54 +24,16 @@ h1, h2, h3, h4, h5, h6, p, div {
 <body>
 
 <div class="body">
-    <h1>CS 4476 - Project Proposal</h1>
+    <h1>CS 4476 - Project</h1>
+
+    <h2>Team CV-GMNW</h2>
 
     <h2>Team members</h2>
     <p><i>William Chen</i> (wchen407), <i>Nathan Lai</i> (nlai8), <i>Marcus Loo</i> (mloo3), <i>Gabor Siffel</i> (gsiffel3)</p>
 
-    <h2>Problem statement</h2>
-    <p>A user will be able to upload their video file to the website. A new video file will be created, which will be a stabilized version of the original video file.</p>
+    <br><br><br>
 
-    <h2>Approach</h2>
-    <p>The approach will utilize two passes in an attempt to stabilize the image frames. The first pass will use feature/corner detection to collect points and then find corresponding points in adjacent frames. Once the points are collected, the homography matrix will then be used to transform the second image frame’s coordinates so that it overlaps with the first frame. The difference between the two image frames will thus be minimized and the distortions will be eliminated. In the second pass, an average between 20 image frames will be taken to eliminate the video being out of frame and follows the original camera. The averaging allows the camera to be kept stabilized without going out of frame.</p>
-    <p>
-        <a href="https://gitlab.com/juergens/stabbot" target="_blank">https://gitlab.com/juergens/stabbot</a>
-        <br>
-        <a href="https://www.mathworks.com/help/vision/examples/video-stabilization-using-point-feature-matching.html" target="_blank">https://www.mathworks.com/help/vision/examples/video-stabilization-using-point-feature-matching.html</a>
-    </p>
-
-    <h2>Experiments and results</h2>
-    <p>We will be manually creating our dataset. This dataset will be based on unstabilized video that we hope can be stabilized through our image stabilization solution.</p>
-    <ul>
-        <li>
-            A short video of someone holding a camera recording a video with no objects in the frame moving
-            <ul>
-                <li>Colorful area</li>
-                <li>Dull-colored area</li>
-            </ul>
-        </li>
-        <li>A short video of someone holding a camera recording a video with an object moving</li>
-        <li>A short video of someone holding a camera and moving around</li>
-    </ul>
-    <p>Our approach can be broken down into 4 dependent experiments:</p>
-    <ol>
-        <li><strong>Feature/Corner Detection</strong>
-            <br>
-            In order to find the corners in a frame, we will be testing out a SIFT, FLANN, and FAST algorithm to see which one results in the best stabilization. We will be using the OpenCV library to implement these algorithms. In running these algorithms, we will determine which algorithm performs the best for our task. As we have not done a deep dive into the three algorithms, we are interested to see what different features/corners they will detect, and how that will affect the rest of our pipeline.
-        </li>
-        <li><strong>Find corresponding points on adjacent frames.</strong>
-            <br>
-            Using the points found in adjacent frames, we will be using the FREAK descriptor and the hamming distance between points to find corresponding points. We expect to see corresponding frames, and we will manually check to see if the corresponding points it found are accurate.
-        </li>
-        <li><strong>Rotate, translate, and scale the second frame to correspond to the first frame coordinates using the corresponding points found.</strong>
-            <br>
-            This is similar to PS1, which means that we will be modifying that code, and try to optimize it since it currently runs very slowly. We hope to see the second image properly overlap with the first image based on the corresponding points found.
-        </li>
-        <li><strong>Average the transformations over 20 frames.</strong>
-            <br>
-            Experiments 1-3 all occurs in the first pass. This experiment is in the second pass. We will be manually coding this, and we hope to see the video not moving out of frame from this.
-        </li>
-    </ol>
+    <p><a href="proposal.html">Project Proposal</a></p>
 </div>
 
 </body>
