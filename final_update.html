@@ -32,6 +32,9 @@ h1, h2, h3, h4, h5, h6, p, div {
     <h2>Abstract</h2>
     <p>Shaky videos have been a problem since the video camera has been created, making it hard to understand what is going on in the video. For our final update, we finished testing several different feature detection algorithms and creating stabilized video examples with each. We connected the disparate parts of our code to accomplish this and be able to input a video and get a stabilized version of the video as the output in a single flow. Out of the three feature detection algorithms we implemented (ORB, SURF, and SIFT), SIFT has given us the best results out in terms of the final product of our image stabilization.</p>
 
+    <h2>Teaser Figure<h2>
+    <img src="teaser.png">
+        
     <h2>Introduction</h2>
     <p>Shaky videos have been a problem since the video camera has been created. Shaky videos make it hard to understand what is going on in the video. However, if you were able to reduce the "shake" in a video, it would greatly increase the clarity of the video. We plan to make an application that allows a user to upload their video file to the website. A new video file will then be created, which will be a stabilized version of the original video file. Based on our research, our pipeline seems to be unique, but the way that we are solving each part of the pipeline, for instance feature detection, is not unique - we are using the ORB feature detector and have also tested using SURF and SIFT feature detection.</p>
 
@@ -71,7 +74,7 @@ h1, h2, h3, h4, h5, h6, p, div {
 
     <p>The results of SURF are similar to ORB in the fact that in only was able to identify high contrast areas. As hessian threshold decreased, more features were identified, but some of these extra features did not look very accurate. However, SURF ran the fastest in these experiments. It took 0.06 seconds.</p>
 
-    <p>From the three different feature detection algorithms above, it seems like SIFT would perform the best. This is because it was able to identify the roof and the windows while it seemed like the other two algorithms were only able to identify the windows. The only problem, however, is that SIFT also runs the slowest. In testing our entire video stabilization pipeline on the north ave panorama, a 5 second video, using SIFT, it took 18.946 seconds to run while when using SURF, it took 8.722 seconds.</p>
+    <p>From the three different feature detection algorithms above, it seems like SURF would perform the best. While it was not able to identify the roof as well as SIFT did, it had already many features. The biggest factor in deciding that SURF was the best choice was the speed. When running our entire pipeline for video stabilization on a 5 second video SURF took 5.27 seconds and SIFT took 14.94 seconds with seemingly no difference in stabilization quality. With this speed, it would allow for longer videos to be created event faster.</p>
 
     <i>Feature Matching</i>
     <p>There were a few parameters that we could adjust for FLANN feature matching. So we decided to change table number and key size and keep the rest as per recommended. For testing purposes we used ORB and decreased the number of features to 20 so the matches between frames are more noticeable.</p>
@@ -100,7 +103,7 @@ h1, h2, h3, h4, h5, h6, p, div {
     <p>The resulting video from SIFT is qualitatively the most stable one, while ORB seems the least stable. All three videos have frames translating to different places when attempting to identify and stabilize the features. The features detected in ORB seems to be the furthest away from each other, thus having jittery frames. With SURF, the transition between frames are still jittery, but it appears to be smoother than the video returned by ORB matching. In contrast, with fine tuning the input parameters of SIFT, the video frames are less jittery and the transition between frames are the smoothest out of all three methods tested.</p>
 
     <h2>Conclusion and Future Work</h2>
-    <p></p>
+    <p>Using SIFT, SURF and ORB feature detection in conjunction with FLANN based feature matching, videos were tested and attempted to be stabilized. Based on the experiments conducted, ORB is the weakest in terms of feature detection. While SURF is able to detect features the fastest, SIFT was able to detect features in much greater detail. For the picture used for experimentation, SIFT detected features in between the roof and the sky, which other algorithms tested cannot. Even though SIFT is able to capture more features, each algorithm is able to capture enough features for transformation in between frames to work. Qualitatively, the resulting stabilized video seems to be the fairly similar, with smooth transition in between frames. Going forward, further fine tuning of hyper parameters can help with the speed of feature detection without compromising the amount of features detected. With higher speed, the stabilization should be easier to use and more streamlined than it currently is. We also want to play around with being able to run stabilize higher resolution videos. As it currently stands, we are running out of memory when trying to stabilize large/hi-def videos.</p>
     <p></p>
 
     <h2>References</h2>
