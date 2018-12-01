@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>CV Final Update</title>
+
+<style>
+div.body {
+    margin: 30px auto 60px;
+    width: 700px;
+}
+h1, h2, h3, h4, h5, h6, p, div {
+    margin: 0;
+    margin-bottom: 15px;
+    border: 0;
+    padding: 0;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="body">
+    <h1>CS 4476 - Final Update</h1>
+
+    <h2>Team members</h2>
+    <p><i>William Chen</i> (wchen407), <i>Nathan Lai</i> (nlai8), <i>Marcus Loo</i> (mloo3), <i>Gabor Siffel</i> (gsiffel3)</p>
+
+    <h2>Abstract</h2>
+    <p>Shaky videos have been a problem since the video camera has been created, making it hard to understand what is going on in the video. For our final update, we finished testing several different feature detection algorithms and creating stabilized video examples with each. We connected the disparate parts of our code to accomplish this and be able to input a video and get a stabilized version of the video as the output in a single flow. Out of the three feature detection algorithms we implemented (ORB, SURF, and SIFT), SIFT has given us the best results out in terms of the final product of our image stabilization.</p>
+
+    <h2>Introduction</h2>
+    <p>Shaky videos have been a problem since the video camera has been created. Shaky videos make it hard to understand what is going on in the video. However, if you were able to reduce the "shake" in a video, it would greatly increase the clarity of the video. We plan to make an application that allows a user to upload their video file to the website. A new video file will then be created, which will be a stabilized version of the original video file. Based on our research, our pipeline seems to be unique, but the way that we are solving each part of the pipeline, for instance feature detection, is not unique - we are using the ORB feature detector and have also tested using SURF and SIFT feature detection.</p>
+
+    <h2>Approach</h2>
+    <p>Separate the video into separate frames. We used opencv to be able to modify the video. All frames are converted into grayscale and the ORB, SIFT, and SURF feature detectors, is initiated and the matches between the two adjacent images were found. Using the Flann based matcher, the detected features between the two images were compared. From there, a ratio proposed by D. Lowe was used to determine how good the found matches were [1]. Figure 1 shows the detected points shown in red and a green line is drawn between matched features. The filtered points are then translated using homography to try and produce a more stabilized image.</p>
+
+    <h2>Experiments and Results</h2>
+    <img src=>
+    <p>We decided to test 3 different feature detection algorithms to see which performed better: ORB, SIFT, and SURF. The two metrics we cared about was execution time and accuracy in extracting features. Time was important because feature detection was occuring on every frame. If it took a long time to calculate, this step could be a major bottleneck. The other metric that we cared about, accuracy of feature extraction. This is obviously important because we feature extraction is the motivation of using these algorithms.</p>
+    <p>For these algorithms we wanted to find hyper parameters that would work the best with the two metrics that we cared about. In the OpenCV documentation they also gave recommendations on certain parameter values referencing papers pertaining to these algorithms. For example, the OpenCV documentation on SIFT recommended using 3 layers in each octave because the D. Lowe paper used it. In order to save time on experimentation, we decided to use these recommendations so we had less hyperparameters to use. We ultimately decided that the hyperparameters worth tuning for ORB, SIFT, and SURF were number of features, edge threshold, and hessian threshold respectively.</p>
+    
+    <p>Original:</p>
+    <img src="original_test_image.png">
+    <img src="orb_nfeatures=100.png">
+    <img src="orb_nfeatures=200.png">
+    <img src="orb_nfeatures=400.png">
+    <img src="orb_nfeatures=600.png">
+    <img src="orb_nfeatures=1000.png">
+
+    <p>Looking at the results, it looks like orb does really well when there is high contrast. Most of the points are in areas near windows where it can see a distinct change between the dark inside and the white frame. Increasing the amount of features did not seem to increase that much more useful information. A lot it found overlapped or were very near existing points. In total, it 0.10 seconds to run all the ORB experiments.</p>
+
+    <p>Results for SIFT:</p>
+    <img src="sift_edgeThreshold=5.png">
+    <img src="sift_edgeThreshold=10.png">
+    <img src="sift_edgeThreshold=20.png">
+    <img src="sift_edgeThreshold=30.png">
+    <img src="sift_edgeThreshold=50.png">
+
+    <p>SIFT worked similarly in identifying the high contrast windows, however, as edge threshold increased, so did the amount of features that appeared. These increased features are useful because they were able to differentiate between the sky and the roof, which the other feature detections were unable to do well. The SIFT experiments took the longest to perform. It took 0.15 seconds.</p>
+
+    <p>Results for SURF:</p>
+    <img src="surf_hessianThreshold=200.png">
+    <img src="surf_hessianThreshold=300.png">
+    <img src="surf_hessianThreshold=400.png">
+    <img src="surf_hessianThreshold=500.png">
+    <img src="surf_hessianThreshold=600.png">
+
+    <p>The results of SURF are similar to ORB in the fact that in only was able to identify high contrast areas. As hessian threshold decreased, more features were identified, but some of these extra features did not look very accurate. However, SURF ran the fastest in these experiments. It took 0.06 seconds.</p>
+
+    <p>From the three different feature detection algorithms above, it seems like SIFT would perform the best. This is because it was able to identify the roof and the windows while it seemed like the other two algorithms were only able to identify the windows. The only problem, however, is that SIFT also runs the slowest. In testing our entire video stabilization pipeline on the north ave panorama, a 5 second video, using SIFT, it took 18.946 seconds to run while when using SURF, it took 8.722 seconds.</p>
+
+    <i>Feature Matching</i>
+    <p>There were a few parameters that we could adjust for FLANN feature matching. So we decided to change table number and key size and keep the rest as per recommended. For testing purposes we used ORB and decreased the number of features to 20 so the matches between frames are more noticeable.</p>
+
+    <p>table_number = 6, key_size = 12, matches = 10, time = .0007</p>
+    <img src="feature_matching_6_12.png">
+    <p>table_number = 12, key_size = 20, matches = 7, time = .006</p>
+    <img src="feature_matching_12_20.png">
+    <p>table_number = 32, key_size = 32, matches = 4, time = 22.95</p>
+    <img src="feature_matching_32_32.png">
+
+    <p>While there are a different number of matches when using different parameters, the images above look almost identical. Because they are so similar, time would be an import factor in deciding which one to use. When table number was 6 and key size was 12 was the performance the fastest with .0007 seconds.</p>
+
+    <h2>Qualitative Results</h2>
+    <p>The resulting stabilization videos using SIFT, SURF and ORB feature matching algorithms are shown below:</p>
+
+    <p>Resulting stabilization video using SIFT</p>
+    <img src="stabilization_sift.gif">
+
+    <p>Resulting stabilization video using SURF</p>
+    <img src="stabilization_surf.gif">
+
+    <p>Resulting stabilization video using ORB</p>
+    <img src="stabilization_orb.gif">
+
+    <p>The resulting video from SIFT is qualitatively the most stable one, while ORB seems the least stable. All three videos have frames translating to different places when attempting to identify and stabilize the features. The features detected in ORB seems to be the furthest away from each other, thus having jittery frames. With SURF, the transition between frames are still jittery, but it appears to be smoother than the video returned by ORB matching. In contrast, with fine tuning the input parameters of SIFT, the video frames are less jittery and the transition between frames are the smoothest out of all three methods tested.</p>
+
+    <h2>Conclusion and Future Work</h2>
+    <p></p>
+    <p></p>
+
+    <h2>References</h2>
+    <p>
+        <span>[1] Cascade Classification - OpenCV 2.4.13.7 Documentation</span>
+        <br>
+        <a href="https://docs.opencv.org/3.4/dc/dc3/tutorial_py_matcher.html" target="_blank">https://docs.opencv.org/3.4/dc/dc3/tutorial_py_matcher.html</a>
+        <br>
+
+        <span>[2] “Feature Detection and Description.” Cascade Classification - OpenCV 2.4.13.7 Documentation</span>
+        <br>
+        <a href="https://docs.opencv.org/3.0-beta/modules/features2d/doc/feature_detection_and_description.html?fbclid=IwAR26bvZJMQkKVIXFCNTxyY5h8QE6QJWey7aMCt-cFMkWnmQzaDnr1C2X88Y" target="_blank">https://docs.opencv.org/3.0-beta/modules/features2d/doc/feature_detection_and_description.html?fbclid=IwAR26bvZJMQkKVIXFCNTxyY5h8QE6QJWey7aMCt-cFMkWnmQzaDnr1C2X88Y</a>
+        <br>
+
+        <span>[3] “Feature Detection and Description.” Cascade Classification - OpenCV 3.0.0-dev Documentation</span>
+        <br>
+        <a href="https://docs.opencv.org/3.0-beta/modules/features2d/doc/feature_detection_and_description.html?fbclid=IwAR26bvZJMQkKVIXFCNTxyY5h8QE6QJWey7aMCt-cFMkWnmQzaDnr1C2X88Y" target="_blank">https://docs.opencv.org/3.0-beta/modules/features2d/doc/feature_detection_and_description.html?fbclid=IwAR26bvZJMQkKVIXFCNTxyY5h8QE6QJWey7aMCt-cFMkWnmQzaDnr1C2X88Y</a>
+        <br>
+
+        <span>[4] A reddit bot that stabilizes gifs. They explained in their approach how averaging the transformations helped improve transformations moving out of view. This idea would be useful in our implemenation.</span>
+        <br>
+        <a href="https://gitlab.com/juergens/stabbot" target="_blank">https://gitlab.com/juergens/stabbot</a>
+        <br>
+
+        <span>[5] Example of stabilizing a video in Matlab. Looking at how they determined similar points between frames seems useful.</span>
+        <br>
+        <a href="https://www.mathworks.com/help/vision/examples/video-stabilization-using-point-feature-matching.html" target="_blank">https://www.mathworks.com/help/vision/examples/video-stabilization-using-point-feature-matching.html</a>
+        <br>
+
+        <span>[6] Theory and Basics of ORB (Oriented FAST and Rotated Brief) in OpenCV</span>
+        <br>
+        <a href="https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_feature2d/py_orb/py_orb.html" target="_blank">https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_feature2d/py_orb/py_orb.html</a>
+        <br>
+
+        <span>[7] SIFT and SURF Feature Matching, Brute-Force and Flann Matcher</span>
+        <br>
+        <a href="https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_feature2d/py_matcher/py_matcher.html" target="_blank">https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_feature2d/py_matcher/py_matcher.html</a>
+
+    </p>
+
+</div>
+
+</body>
+
+</html>
